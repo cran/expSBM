@@ -31,8 +31,9 @@ void expsbm::Optimisation()
       Rcpp::Rcout << "WARNING: " << n_iter_max << " iterations reached" << std::endl;
       stop_condition = true;
     }
-    if (abs(elbo_value - elbo_values_store.at(iter-1)) / abs(elbo_value) <= tol) stop_condition = true;
-    // if (elbo_value < elbo_values_store.at(iter-1) + tol) stop_condition = true;
+    double relative_increment = (elbo_value - elbo_values_store.at(iter-1)) / elbo_value;
+    if (relative_increment < 0) relative_increment = -relative_increment;
+    if (relative_increment <= tol) stop_condition = true;
     ++iter;
   }
   elbo_values_store.resize(iter);
